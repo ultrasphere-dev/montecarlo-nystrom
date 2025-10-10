@@ -1,0 +1,23 @@
+# Changes here will be overwritten by Copier
+_commit: 278bbfc
+_src_path: gh:34j/pypackage-template
+add_me_as_contributor: false
+copyright_year: '2025'
+documentation: true
+email: 34j.95a2p@simplelogin.com
+full_name: ultrasphere-dev
+github_app_installation_ids: ''
+github_username: ultrasphere-dev
+has_cli: false
+initial_commit: false
+is_django_package: false
+open_source_license: MIT
+open_with_editor: true
+package_name: montecarlo_nystrom
+project_name: Monte-Carlo Nystrom
+project_short_description: Monte-Carlo Nystrom method in NumPy / PyTorch
+project_slug: montecarlo-nystrom
+run_uv_sync: false
+setup_github: false
+setup_pre_commit: false
+
