@@ -9,7 +9,19 @@
   "imageSize": 80,
   "commit": true,
   "commitConvention": "angular",
-  "contributors": [],
+  "contributors": [
+    {
+      "login": "ultrasphere-dev",
+      "name": "ultrasphere-dev",
+      "avatar_url": "https://avatars.githubusercontent.com/u/231439132?v=4",
+      "profile": "https://github.com/ultrasphere-dev",
+      "contributions": [
+        "code",
+        "ideas",
+        "doc"
+      ]
+    }
+  ],
   "contributorsPerLine": 7,
   "skipCi": true
 }

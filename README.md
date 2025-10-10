@@ -52,8 +52,19 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 
 <!-- prettier-ignore-start -->
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
-<!-- markdownlint-enable -->
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/ultrasphere-dev"><img src="https://avatars.githubusercontent.com/u/231439132?v=4?s=80" width="80px;" alt="ultrasphere-dev"/><br /><sub><b>ultrasphere-dev</b></sub></a><br /><a href="https://github.com/ultrasphere-dev/montecarlo-nystrom/commits?author=ultrasphere-dev" title="Code">💻</a> <a href="#ideas-ultrasphere-dev" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/ultrasphere-dev/montecarlo-nystrom/commits?author=ultrasphere-dev" title="Documentation">📖</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 <!-- prettier-ignore-end -->
 
