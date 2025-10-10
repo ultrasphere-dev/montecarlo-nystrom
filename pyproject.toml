@@ -4,7 +4,7 @@ requires = [ "setuptools>=77.0.3" ]
 
 [project]
 name = "montecarlo-nystrom"
-version = "0.0.0"
+version = "1.0.0"
 description = "Monte-Carlo Nystrom method in NumPy / PyTorch"
 readme = "README.md"
 license = "MIT"
