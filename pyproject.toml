@@ -26,6 +26,8 @@ classifiers = [
 ]
 
 dependencies = [
+    "array-api-compat>=1.12.0",
+    "types-array-api>=1.1.4",
 ]
 urls."Bug Tracker" = "https://github.com/ultrasphere-dev/montecarlo-nystrom/issues"
 urls.Changelog = "https://github.com/ultrasphere-dev/montecarlo-nystrom/blob/main/CHANGELOG.md"
