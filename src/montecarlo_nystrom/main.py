@@ -44,30 +44,30 @@ def montecarlo_nystrom(
     ----------
     random_samples : Callable[[int], Array]
         A function that takes an integer n and
-        returns n i.i.d. samples from the distribution p of shape (n, d).
+        returns n i.i.d. samples from the distribution p of shape (..., n, d).
     kernel : Callable[[Array, Array], Array]
-        Kernel function k of (..., d), (..., d) -> (...,).
+        Kernel function k of (..., :, :, d), (..., :, :, d) -> (..., :, :).
     rhs : Callable[[Array], Array]
-        Right-hand side function f of (..., d) -> (...,).
+        Right-hand side function f of (..., :, d) -> (..., :).
     n : int
         The number of random samples to draw from the distribution p.
 
     Returns
     -------
     Callable[[Array], Array]
-        Approximate solution function z_N that takes an array of shape (..., d)
-        and returns an array of shape (...,).
+        Approximate solution function z_N that takes an array of shape (...(x), ..., d)
+        and returns an array of shape (...(x), ...).
 
     """
     y = random_samples(n)
-    K = kernel(y[:, None, :], y[None, :, :])
+    K = kernel(y[..., :, None, :], y[..., None, :, :])
     b = rhs(y)
     xp = array_namespace(K, b)
     A = xp.eye(n) + K / n
     z_N_samples = xp.linalg.solve(A, b)
 
     def z_N(x: Array) -> Array:
-        K_x = kernel(x[:, None, :], y[None, :, :])
+        K_x = kernel(x[..., None, :], y)
         return rhs(x) - K_x @ z_N_samples / n
 
     return z_N
