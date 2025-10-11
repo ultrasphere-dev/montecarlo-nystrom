@@ -63,6 +63,7 @@ def montecarlo_nystrom(
     K = kernel(y[..., :, None, :], y[..., None, :, :])
     b = rhs(y)
     xp = array_namespace(K, b)
+    K[..., xp.arange(n), xp.arange(n)] = 0
     A = xp.eye(n) + K / n
     z_N_samples = xp.linalg.solve(A, b)
 
