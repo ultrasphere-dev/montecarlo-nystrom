@@ -66,6 +66,11 @@ def montecarlo_nystrom(
 
     """
     y = random_samples(n * n_mean)
+    if y.shape[-2] != n * n_mean:
+        raise ValueError(
+            f"random_samples returned array of shape {y.shape}, "
+            f"expected (..., {n * n_mean}, d)"
+        )
     xp = array_namespace(y)
     y = xp.reshape(y, (*y.shape[:-2], n_mean, n, y.shape[-1]))  # (..., n_mean, n, d)
     K = kernel(y[..., :, :, None, :], y[..., :, None, :, :])  # (..., n_mean, n, n)
@@ -84,6 +89,10 @@ def montecarlo_nystrom(
     z_N_samples = xp.linalg.solve(A, b[..., None])[..., 0]  # (..., n_mean, n)
 
     def z_N(x: Array) -> Array:
+        if x.shape[-1] != y.shape[-1]:
+            raise ValueError(
+                f"x has shape {x.shape}, expected (...(x), ..., {y.shape[-1]})"
+            )
         K_x = kernel(x[..., None, None, :], y)  # (...(x), ..., n_mean, n)
         return (
             rhs(x) - xp.mean(xp.vecdot(xp.conj(K_x), z_N_samples, axis=-1), axis=-1) / n

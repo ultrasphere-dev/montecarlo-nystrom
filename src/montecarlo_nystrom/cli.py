@@ -87,9 +87,15 @@ def case(
             return xp.exp(xp.asarray(1j * k) * x[..., 0])
 
         def rho(n: int, /) -> Array:
-            return us.random_ball(us.create_polar(), shape=(n,), xp=np, device=device)
+            return xp.moveaxis(
+                us.random_ball(us.create_polar(), shape=(n,), xp=xp, device=device),
+                0,
+                -1,
+            )
 
-        x = us.random_ball(us.create_polar(), shape=(N,), xp=np, device=device)
+        x = xp.moveaxis(
+            us.random_ball(us.create_polar(), shape=(N,), xp=xp, device=device), 0, -1
+        )
         zf = montecarlo_nystrom(
             random_samples=rho,
             kernel=kernel,
@@ -101,3 +107,4 @@ def case(
         x, z = to_device(x, "cpu"), to_device(z, "cpu")
         fig, ax = plt.subplots()
         ax.scatter(x[:, 0], x[:, 1], c=xp.real(z), cmap="jet")
+        fig.savefig(f"case_{case_num}_m_{M}_n_{N}.png")
