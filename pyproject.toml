@@ -31,6 +31,7 @@ dependencies = [
     "matplotlib>=3.10.7",
     "numpy>=2.2.6",
     "types-array-api>=1.1.4",
+    "ultrasphere>=1.0.0",
 ]
 urls."Bug Tracker" = "https://github.com/ultrasphere-dev/montecarlo-nystrom/issues"
 urls.Changelog = "https://github.com/ultrasphere-dev/montecarlo-nystrom/blob/main/CHANGELOG.md"
