@@ -4,6 +4,7 @@ from array_api._2024_12 import Array
 from array_api_compat import array_namespace, to_device
 from cyclopts import App
 from matplotlib import pyplot as plt
+from rich import print
 
 from ._main import montecarlo_nystrom
 
@@ -102,6 +103,7 @@ def case(
             )
 
         def solve(A: Array, b: Array, /) -> Array:
+            print("Using JAX CG solver")
             jax_device = jax.devices(device)[0]
             A, b = (
                 jax.numpy.asarray(A, device=jax_device),
@@ -110,7 +112,7 @@ def case(
             x = jax.numpy.stack(
                 [jax.scipy.sparse.linalg.cg(A[i], b[i])[0] for i in range(A.shape[0])]
             )
-            return xp.from_dlpack(x)
+            return xp.from_dlpack(x, device=device)
 
         x = xp.moveaxis(us.random_ball(c, shape=(n_plot,), xp=xp, device=device), 0, -1)
         zf = montecarlo_nystrom(
