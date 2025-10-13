@@ -10,6 +10,7 @@ def montecarlo_nystrom(
     kernel: Callable[[Array, Array], Array],
     rhs: Callable[[Array], Array],
     n: int,
+    n_mean: int = 1,
 ) -> Callable[[Array], Array]:
     r"""
     Solve integral equations of the second kind of the following form.
@@ -47,10 +48,15 @@ def montecarlo_nystrom(
         returns n i.i.d. samples from the distribution p of shape (..., n, d).
     kernel : Callable[[Array, Array], Array]
         Kernel function k of (..., :, :, d), (..., :, :, d) -> (..., :, :).
+
+        The diagonal part will be automatically dropped
+        and can be of any value.
     rhs : Callable[[Array], Array]
         Right-hand side function f of (..., :, d) -> (..., :).
     n : int
         The number of random samples to draw from the distribution p.
+    n_mean : int
+        The number of independent runs to average over, by default 1.
 
     Returns
     -------
@@ -59,16 +65,17 @@ def montecarlo_nystrom(
         and returns an array of shape (...(x), ...).
 
     """
-    y = random_samples(n)
-    K = kernel(y[..., :, None, :], y[..., None, :, :])
-    b = rhs(y)
-    xp = array_namespace(K, b)
-    K[..., xp.arange(n), xp.arange(n)] = 0
+    y = random_samples(n * n_mean)
+    xp = array_namespace(y)
+    y = xp.reshape(y, (*y.shape[:-2], n_mean, n, y.shape[-1]))  # (..., n_mean, n, d)
+    K = kernel(y[..., :, :, None, :], y[..., :, None, :, :])  # (..., n_mean, n, n)
+    b = rhs(y)  # (..., n_mean, n)
+    K[..., :, xp.arange(n), xp.arange(n)] = 0  # drop diagonal
     A = xp.eye(n) + K / n
-    z_N_samples = xp.linalg.solve(A, b)
+    z_N_samples = xp.linalg.solve(A, b)  # (..., n_mean, n)
 
     def z_N(x: Array) -> Array:
-        K_x = kernel(x[..., None, :], y)
-        return rhs(x) - K_x @ z_N_samples / n
+        K_x = kernel(x[..., None, None, :], y)
+        return xp.mean(rhs(x) - K_x @ z_N_samples / n, axis=-2)
 
     return z_N
