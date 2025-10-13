@@ -112,7 +112,7 @@ def case(
             x = jax.numpy.stack(
                 [jax.scipy.sparse.linalg.cg(A[i], b[i])[0] for i in range(A.shape[0])]
             )
-            return xp.from_dlpack(x, device=device)
+            return xp.from_dlpack(x)
 
         x = xp.moveaxis(us.random_ball(c, shape=(n_plot,), xp=xp, device=device), 0, -1)
         zf = montecarlo_nystrom(
