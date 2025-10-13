@@ -21,6 +21,7 @@ def case(case_num: int, N: int = 2000, M: int = 100) -> None:
 
         def rhs(x: Array, /) -> Array:
             xp = array_namespace(x)
+            x = x[..., 0]
             if case_num == 1:
                 return xp.ones_like(x)
             elif case_num == 2:
@@ -43,7 +44,7 @@ def case(case_num: int, N: int = 2000, M: int = 100) -> None:
         )
         z = zf(x)
         fig, ax = plt.subplots()
-        ax.plot(x[:, 0], z[:, 0], label="Approximate solution")
+        ax.plot(x[:, 0], z, label="Approximate solution")
         ax.set_title(f"Case {case_num}")
         ax.legend()
         fig.savefig(f"case_{case_num}.png")

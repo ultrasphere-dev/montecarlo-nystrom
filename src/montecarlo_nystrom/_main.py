@@ -70,12 +70,22 @@ def montecarlo_nystrom(
     y = xp.reshape(y, (*y.shape[:-2], n_mean, n, y.shape[-1]))  # (..., n_mean, n, d)
     K = kernel(y[..., :, :, None, :], y[..., :, None, :, :])  # (..., n_mean, n, n)
     b = rhs(y)  # (..., n_mean, n)
+    if K.shape[-3:] != (n_mean, n, n):
+        raise ValueError(
+            f"kernel returned array of shape {K.shape}, "
+            f"expected (..., {n_mean}, {n}, {n})"
+        )
+    if b.shape[-2:] != (n_mean, n):
+        raise ValueError(
+            f"rhs returned array of shape {b.shape}, expected (..., {n_mean}, {n})"
+        )
     K[..., :, xp.arange(n), xp.arange(n)] = 0  # drop diagonal
     A = xp.eye(n) + K / n
-    z_N_samples = xp.linalg.solve(A, b)  # (..., n_mean, n)
+    z_N_samples = xp.linalg.solve(A, b[..., None])[..., 0]  # (..., n_mean, n)
 
     def z_N(x: Array) -> Array:
-        K_x = kernel(x[..., None, None, :], y)
-        return xp.mean(rhs(x) - K_x @ z_N_samples / n, axis=-2)
+        K_x = kernel(x[..., None, None, :], y)  # (...(x), ..., n_mean, n)
+        print(K_x.shape)
+        return rhs(x) - xp.mean(xp.sum(K_x * z_N_samples, axis=-1), axis=-1) / n
 
     return z_N
