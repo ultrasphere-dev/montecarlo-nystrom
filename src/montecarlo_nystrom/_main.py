@@ -92,9 +92,13 @@ def montecarlo_nystrom(
         )
     K[..., :, xp.arange(n), xp.arange(n)] = 0  # drop diagonal
     A = xp.eye(n, dtype=K.dtype, device=K.device) + K / n
-    z_N_samples = (solve or xp.linalg.solve)(A, b[..., None])[
-        ..., 0
-    ]  # (..., n_mean, n)
+    z_N_samples = (solve or xp.linalg.solve)(A, b[..., None])
+    if z_N_samples.shape[-3:] != (n_mean, n, 1):
+        raise ValueError(
+            f"solve returned array of shape {z_N_samples.shape}, "
+            f"expected (..., {n_mean}, {n}, 1)"
+        )
+    z_N_samples = z_N_samples[..., 0]  # (..., n_mean, n)
 
     def z_N(x: Array) -> Array:
         if x.shape[-1] != y.shape[-1]:

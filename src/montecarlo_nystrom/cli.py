@@ -1,3 +1,4 @@
+import jax
 import numpy as np
 from array_api._2024_12 import Array
 from array_api_compat import array_namespace, to_device
@@ -100,6 +101,17 @@ def case(
                 -1,
             )
 
+        def solve(A: Array, b: Array, /) -> Array:
+            jax_device = jax.devices(device)[0]
+            A, b = (
+                jax.numpy.asarray(A, device=jax_device),
+                jax.numpy.asarray(b, device=jax_device),
+            )
+            x = jax.numpy.stack(
+                [jax.scipy.sparse.linalg.cg(A[i], b[i])[0] for i in range(A.shape[0])]
+            )
+            return xp.from_dlpack(x)
+
         x = xp.moveaxis(us.random_ball(c, shape=(n_plot,), xp=xp, device=device), 0, -1)
         zf = montecarlo_nystrom(
             random_samples=rho,
@@ -107,6 +119,7 @@ def case(
             rhs=rhs,
             n=N,
             n_mean=M,
+            solve=solve,
         )
         z = zf(x)
         x, z = to_device(x, "cpu"), to_device(z, "cpu")
