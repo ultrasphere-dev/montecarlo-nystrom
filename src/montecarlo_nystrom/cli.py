@@ -14,6 +14,7 @@ def case(
     case_num: int,
     N: int = 2000,
     M: int = 100,
+    n_plot: int = 2000,
     backend: str = "torch",
     device: str | None = None,
 ) -> None:
@@ -55,7 +56,7 @@ def case(
             rng = np.random.default_rng(0)
             return xp.asarray(rng.uniform(0, 1, size=(i, 1)), device=device)
 
-        x = xp.linspace(0, 1, N, device=device)[:, None]
+        x = xp.linspace(0, 1, n_plot, device=device)[:, None]
         zf = montecarlo_nystrom(
             random_samples=p,
             kernel=kernel,
@@ -99,7 +100,7 @@ def case(
                 -1,
             )
 
-        x = xp.moveaxis(us.random_ball(c, shape=(N,), xp=xp, device=device), 0, -1)
+        x = xp.moveaxis(us.random_ball(c, shape=(n_plot,), xp=xp, device=device), 0, -1)
         zf = montecarlo_nystrom(
             random_samples=rho,
             kernel=kernel,
@@ -110,5 +111,7 @@ def case(
         z = zf(x)
         x, z = to_device(x, "cpu"), to_device(z, "cpu")
         fig, ax = plt.subplots()
-        ax.scatter(x[:, 0], x[:, 1], c=xp.real(z), cmap="jet")
+        sc = ax.scatter(x[:, 0], x[:, 1], c=xp.real(z), cmap="jet", vmin=-2, vmax=2)
+        fig.colorbar(sc, ax=ax, label="Re z")
+        ax.set_title(f"Case {case_num}, M={M}, N={N}, k={k}, m={m}")
         fig.savefig(f"case_{case_num}_m_{M}_n_{N}.png")
