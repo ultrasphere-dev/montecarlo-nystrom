@@ -73,6 +73,7 @@ def case(
     if case_num == 4:
         import ultrasphere as us
 
+        c = us.create_polar()
         k = 5
         m = 10
 
@@ -80,7 +81,12 @@ def case(
             xp = array_namespace(x, y)
             k_ = xp.asarray(k)
             m_ = xp.asarray(m)
-            return (m_ - 1) * k_**2 * us.fundamental_solution(xp.asarray(2), x - y, k_)
+            return (
+                c.volume()
+                * (m_ - 1)
+                * k_**2
+                * us.fundamental_solution(xp.asarray(2), x - y, k_)
+            )
 
         def rhs(x: Array, /) -> Array:
             xp = array_namespace(x)
@@ -88,14 +94,12 @@ def case(
 
         def rho(n: int, /) -> Array:
             return xp.moveaxis(
-                us.random_ball(us.create_polar(), shape=(n,), xp=xp, device=device),
+                us.random_ball(c, shape=(n,), xp=xp, device=device),
                 0,
                 -1,
             )
 
-        x = xp.moveaxis(
-            us.random_ball(us.create_polar(), shape=(N,), xp=xp, device=device), 0, -1
-        )
+        x = xp.moveaxis(us.random_ball(c, shape=(N,), xp=xp, device=device), 0, -1)
         zf = montecarlo_nystrom(
             random_samples=rho,
             kernel=kernel,
