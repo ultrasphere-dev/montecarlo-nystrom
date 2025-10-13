@@ -11,6 +11,7 @@ def montecarlo_nystrom(
     rhs: Callable[[Array], Array],
     n: int,
     n_mean: int = 1,
+    solve: Callable[[Array, Array], Array] | None = None,
 ) -> Callable[[Array], Array]:
     r"""
     Solve integral equations of the second kind of the following form.
@@ -57,6 +58,11 @@ def montecarlo_nystrom(
         The number of random samples to draw from the distribution p.
     n_mean : int
         The number of independent runs to average over, by default 1.
+    solve : Callable[[Array, Array], Array] | None, optional
+        A function that takes a matrix A of shape (..., n, n)
+        and a right-hand side b of shape (..., n, 1)
+        and returns the solution of shape (..., n, 1).
+        If None, uses `xp.linalg.solve`, by default None.
 
     Returns
     -------
@@ -86,7 +92,9 @@ def montecarlo_nystrom(
         )
     K[..., :, xp.arange(n), xp.arange(n)] = 0  # drop diagonal
     A = xp.eye(n, dtype=K.dtype, device=K.device) + K / n
-    z_N_samples = xp.linalg.solve(A, b[..., None])[..., 0]  # (..., n_mean, n)
+    z_N_samples = (solve or xp.linalg.solve)(A, b[..., None])[
+        ..., 0
+    ]  # (..., n_mean, n)
 
     def z_N(x: Array) -> Array:
         if x.shape[-1] != y.shape[-1]:
