@@ -23,8 +23,13 @@ def case(
     elif backend == "torch":
         from array_api_compat import torch as xp
     if device is None:
-        if backend == "torch" and xp.cuda.is_available():
-            device = "cuda"
+        if backend == "torch":
+            import torch
+
+            if torch.cuda.is_available():
+                device = "cuda"
+            else:
+                device = "cpu"
         else:
             device = "cpu"
 

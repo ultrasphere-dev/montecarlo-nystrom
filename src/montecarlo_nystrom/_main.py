@@ -80,12 +80,11 @@ def montecarlo_nystrom(
             f"rhs returned array of shape {b.shape}, expected (..., {n_mean}, {n})"
         )
     K[..., :, xp.arange(n), xp.arange(n)] = 0  # drop diagonal
-    A = xp.eye(n) + K / n
+    A = xp.eye(n, dtype=K.dtype, device=K.device) + K / n
     z_N_samples = xp.linalg.solve(A, b[..., None])[..., 0]  # (..., n_mean, n)
 
     def z_N(x: Array) -> Array:
         K_x = kernel(x[..., None, None, :], y)  # (...(x), ..., n_mean, n)
-        print(K_x.shape)
         return rhs(x) - xp.mean(xp.sum(K_x * z_N_samples, axis=-1), axis=-1) / n
 
     return z_N
