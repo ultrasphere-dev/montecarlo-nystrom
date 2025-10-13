@@ -85,6 +85,8 @@ def montecarlo_nystrom(
 
     def z_N(x: Array) -> Array:
         K_x = kernel(x[..., None, None, :], y)  # (...(x), ..., n_mean, n)
-        return rhs(x) - xp.mean(xp.sum(K_x * z_N_samples, axis=-1), axis=-1) / n
+        return (
+            rhs(x) - xp.mean(xp.vecdot(xp.conj(K_x), z_N_samples, axis=-1), axis=-1) / n
+        )
 
     return z_N
