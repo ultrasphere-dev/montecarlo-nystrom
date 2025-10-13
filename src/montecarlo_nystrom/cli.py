@@ -65,7 +65,7 @@ def case(
         )
         z = zf(x)
         fig, ax = plt.subplots()
-        x, z = to_device(xp, x), to_device(xp, z)
+        x, z = to_device(x, "cpu"), to_device(z, "cpu")
         ax.plot(x[:, 0], z, label="Approximate solution")
         ax.set_title(f"Case {case_num}, M={M}, N={N}")
         ax.legend()
@@ -98,6 +98,6 @@ def case(
             n_mean=M,
         )
         z = zf(x)
-        x, z = to_device(xp, x), to_device(xp, z)
+        x, z = to_device(x, "cpu"), to_device(z, "cpu")
         fig, ax = plt.subplots()
         ax.scatter(x[:, 0], x[:, 1], c=xp.real(z), cmap="jet")
