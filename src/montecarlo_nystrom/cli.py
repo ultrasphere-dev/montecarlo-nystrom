@@ -135,6 +135,7 @@ def case(
         ax.set_title(f"Case {case_num}, M={M}, N={N}, k={k}, m={m}")
         fig.savefig(f"case_{case_num}_m_{M}_n_{N}.png")
     if case_num == 5:
+        import ultrasphere as us
         from scipy.special import spherical_jn, spherical_yn
 
         def harmonic_capacity_sphere(k: int, rho: int = 1) -> float:
@@ -152,7 +153,6 @@ def case(
 
         k = 1
         s = 1
-        c = us.create_sphere()
         cap = harmonic_capacity_sphere(k)
         print("Harmonic capacity of unit sphere:", cap)
 
@@ -172,7 +172,7 @@ def case(
 
         def rho(n: int, /) -> Array:
             return xp.moveaxis(
-                us.random_sphere(c, shape=(n,), xp=xp, device=device),
+                us.random_ball(us.create_standard(2), shape=(n,), xp=xp, device=device),
                 0,
                 -1,
             )
