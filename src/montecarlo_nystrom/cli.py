@@ -92,7 +92,7 @@ def case(
                 * -1j
                 / (4 * xp.pi)
                 * hankel1(0, k_ * xp.linalg.vector_norm(x - y, axis=-1))
-                # * us.fundamental_solution(xp.asarray(2), x - y, k_)
+                # * us.fundamental_solution(2, x - y, k_) # <- buggy
             )
 
         def rhs(x: Array, /) -> Array:
@@ -134,3 +134,71 @@ def case(
         fig.colorbar(sc, ax=ax, label="Re z")
         ax.set_title(f"Case {case_num}, M={M}, N={N}, k={k}, m={m}")
         fig.savefig(f"case_{case_num}_m_{M}_n_{N}.png")
+    if case_num == 5:
+        from scipy.special import spherical_jn, spherical_yn
+
+        def harmonic_capacity_sphere(k: int, rho: int = 1) -> float:
+            res = (
+                -4
+                * np.pi
+                / (
+                    1j
+                    * k
+                    * spherical_jn(0, k * rho)
+                    * (spherical_jn(0, k * rho) + 1j * spherical_yn(0, k * rho))
+                )
+            )
+            return float(res)
+
+        k = 1
+        s = 1
+        c = us.create_sphere()
+        cap = harmonic_capacity_sphere(k)
+        print("Harmonic capacity of unit sphere:", cap)
+
+        c = 1 + (1j * k * s) / (4 * np.pi) * cap
+
+        def fundamental_solution_3d(x: Array, y: Array, k: int, /) -> Array:
+            xp = array_namespace(x, y)
+            r = xp.linalg.vector_norm(x - y, axis=-1)
+            return xp.exp(1j * k * r) / (4 * xp.pi * r)
+
+        def kernel(x: Array, y: Array, /) -> Array:
+            return -cap * s * fundamental_solution_3d(x, y, k) / c
+
+        def rhs(x: Array, /) -> Array:
+            xp = array_namespace(x)
+            return -cap * xp.exp(1j * k * x[..., 0]) / c
+
+        def rho(n: int, /) -> Array:
+            return xp.moveaxis(
+                us.random_sphere(c, shape=(n,), xp=xp, device=device),
+                0,
+                -1,
+            )
+
+        zf = montecarlo_nystrom(
+            random_samples=rho,
+            kernel=kernel,
+            rhs=rhs,
+            n=N,
+            n_mean=M,
+        )
+        x = xp.moveaxis(
+            us.random_ball(us.create_polar(), shape=(n_plot,), xp=xp, device=device),
+            0,
+            -1,
+        )
+        x = xp.concat(
+            [x, xp.zeros((*x.shape[:-1], 1), device=x.device, dtype=x.dtype)], axis=-1
+        )
+        z = zf(x)
+        u = -cap * z
+        x, u = to_device(x, "cpu"), to_device(u, "cpu")
+        fig, ax = plt.subplots()
+        sc = ax.scatter(x[:, 0], x[:, 1], c=xp.real(u), cmap="jet", vmin=-2, vmax=2)
+        fig.colorbar(sc, ax=ax, label="Re u")
+        ax.set_title(f"Case {case_num}, M={M}, N={N}, k={k}, m={s}, cap={cap:.2f}")
+        fig.savefig(f"case_{case_num}_m_{M}_n_{N}.png")
+    else:
+        raise ValueError(f"Invalid case number: {case_num}")
