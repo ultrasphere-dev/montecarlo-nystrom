@@ -138,7 +138,7 @@ def case(
         import ultrasphere as us
         from scipy.special import spherical_jn, spherical_yn
 
-        def harmonic_capacity_sphere(k: int, rho: int = 1) -> float:
+        def harmonic_capacity_sphere(k: int, rho: int = 1) -> complex:
             res = (
                 -4
                 * np.pi
@@ -149,7 +149,7 @@ def case(
                     * (spherical_jn(0, k * rho) + 1j * spherical_yn(0, k * rho))
                 )
             )
-            return float(res)
+            return complex(res)
 
         k = 1
         s = 1
@@ -196,7 +196,7 @@ def case(
         u = -cap * z
         x, u = to_device(x, "cpu"), to_device(u, "cpu")
         fig, ax = plt.subplots()
-        sc = ax.scatter(x[:, 0], x[:, 1], c=xp.real(u), cmap="jet", vmin=-2, vmax=2)
+        sc = ax.scatter(x[:, 0], x[:, 1], c=xp.real(u), cmap="jet")
         fig.colorbar(sc, ax=ax, label="Re u")
         ax.set_title(f"Case {case_num}, M={M}, N={N}, k={k}, m={s}, cap={cap:.2f}")
         fig.savefig(f"case_{case_num}_m_{M}_n_{N}.png")
