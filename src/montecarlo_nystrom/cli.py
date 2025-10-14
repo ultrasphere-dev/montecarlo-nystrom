@@ -74,7 +74,7 @@ def case(
         ax.set_title(f"Case {case_num}, M={M}, N={N}")
         ax.legend()
         fig.savefig(f"case_{case_num}_m_{M}_n_{N}.png")
-    if case_num == 4:
+    elif case_num == 4:
         import ultrasphere as us
 
         c = us.create_polar()
@@ -134,7 +134,7 @@ def case(
         fig.colorbar(sc, ax=ax, label="Re z")
         ax.set_title(f"Case {case_num}, M={M}, N={N}, k={k}, m={m}")
         fig.savefig(f"case_{case_num}_m_{M}_n_{N}.png")
-    if case_num == 5:
+    elif case_num == 5:
         import ultrasphere as us
         from scipy.special import spherical_jn, spherical_yn
 
