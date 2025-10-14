@@ -152,11 +152,9 @@ def case(
             return complex(res)
 
         k = 1
-        s = 1
+        sN = 1
         cap = harmonic_capacity_sphere(k)
         print("Harmonic capacity of unit sphere:", cap)
-
-        c = 1 + (1j * k * s) / (4 * np.pi) * cap
 
         def fundamental_solution_3d(x: Array, y: Array, k: int, /) -> Array:
             xp = array_namespace(x, y)
@@ -164,11 +162,11 @@ def case(
             return xp.exp(1j * k * r) / (4 * xp.pi * r)
 
         def kernel(x: Array, y: Array, /) -> Array:
-            return -cap * s * fundamental_solution_3d(x, y, k) / c
+            return -cap * sN * fundamental_solution_3d(x, y, k)
 
         def rhs(x: Array, /) -> Array:
             xp = array_namespace(x)
-            return -cap * xp.exp(1j * k * x[..., 0]) / c
+            return xp.exp(1j * k * x[..., 0])
 
         def rho(n: int, /) -> Array:
             return xp.moveaxis(
@@ -193,12 +191,11 @@ def case(
             [x, xp.zeros((*x.shape[:-1], 1), device=x.device, dtype=x.dtype)], axis=-1
         )
         z = zf(x)
-        u = -cap * z
-        x, u = to_device(x, "cpu"), to_device(u, "cpu")
+        x, z = to_device(x, "cpu"), to_device(z, "cpu")
         fig, ax = plt.subplots()
-        sc = ax.scatter(x[:, 0], x[:, 1], c=xp.real(u), cmap="jet")
-        fig.colorbar(sc, ax=ax, label="Re u")
-        ax.set_title(f"Case {case_num}, M={M}, N={N}, k={k}, m={s}, cap={cap:.2f}")
+        sc = ax.scatter(x[:, 0], x[:, 1], c=xp.real(z), cmap="jet")
+        fig.colorbar(sc, ax=ax, label="Re z")
+        ax.set_title(f"Case {case_num}, M={M}, N={N}, k={k}, sN={sN}, cap={cap:.2f}")
         fig.savefig(f"case_{case_num}_m_{M}_n_{N}.png")
     else:
         raise ValueError(f"Invalid case number: {case_num}")
