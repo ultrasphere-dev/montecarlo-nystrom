@@ -5,6 +5,7 @@ from array_api_compat import array_namespace, to_device
 from cyclopts import App
 from matplotlib import pyplot as plt
 from rich import print
+from scipy.special import hankel1
 
 from ._main import montecarlo_nystrom
 
@@ -88,7 +89,10 @@ def case(
                 c.volume()
                 * (m_ - 1)
                 * k_**2
-                * us.fundamental_solution(xp.asarray(2), x - y, k_)
+                * -1j
+                / (4 * xp.pi)
+                * hankel1(0, k_ * xp.linalg.vector_norm(x - y, axis=-1))
+                # * us.fundamental_solution(xp.asarray(2), x - y, k_)
             )
 
         def rhs(x: Array, /) -> Array:
@@ -121,7 +125,7 @@ def case(
             rhs=rhs,
             n=N,
             n_mean=M,
-            solve=solve,
+            # solve=solve,
         )
         z = zf(x)
         x, z = to_device(x, "cpu"), to_device(z, "cpu")
