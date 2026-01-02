@@ -42,10 +42,7 @@ urls.repository = "https://github.com/ultrasphere-dev/montecarlo-nystrom"
 scripts.montecarlo-nystrom = "montecarlo_nystrom.cli:app"
 
 [project.optional-dependencies]
-cli = [
-    "jax>=0.7.2",
-    "torch>=2.8.0",
-]
+cli = []
 
 [dependency-groups]
 dev = [

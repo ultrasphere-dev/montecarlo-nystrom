@@ -72,6 +72,8 @@ def case(
         x, z = to_device(x, "cpu"), to_device(z, "cpu")
         ax.plot(x[:, 0], z, label="Approximate solution")
         ax.set_title(f"Case {case_num}, M={M}, N={N}")
+        ax.set_xlabel("x")
+        ax.set_ylabel("z")
         ax.legend()
         fig.savefig(f"case_{case_num}_m_{M}_n_{N}.png")
     elif case_num == 4:
@@ -133,23 +135,14 @@ def case(
         sc = ax.scatter(x[:, 0], x[:, 1], c=xp.real(z), cmap="jet", vmin=-2, vmax=2)
         fig.colorbar(sc, ax=ax, label="Re z")
         ax.set_title(f"Case {case_num}, M={M}, N={N}, k={k}, m={m}")
+        ax.set_xlabel("x0")
+        ax.set_ylabel("x1")
         fig.savefig(f"case_{case_num}_m_{M}_n_{N}.png")
     elif case_num == 5:
         import ultrasphere as us
-        from scipy.special import spherical_jn, spherical_yn
 
         def harmonic_capacity_sphere(k: int, rho: int = 1) -> complex:
-            res = (
-                -4
-                * np.pi
-                / (
-                    1j
-                    * k
-                    * spherical_jn(0, k * rho)
-                    * (spherical_jn(0, k * rho) + 1j * spherical_yn(0, k * rho))
-                )
-            )
-            return complex(res)
+            return -4 * np.pi * rho
 
         k = 1
         sN = 1
@@ -196,6 +189,8 @@ def case(
         sc = ax.scatter(x[:, 0], x[:, 1], c=xp.real(z), cmap="jet")
         fig.colorbar(sc, ax=ax, label="Re z")
         ax.set_title(f"Case {case_num}, M={M}, N={N}, k={k}, sN={sN}, cap={cap:.2f}")
+        ax.set_xlabel("x0")
+        ax.set_ylabel("x1")
         fig.savefig(f"case_{case_num}_m_{M}_n_{N}.png")
     else:
         raise ValueError(f"Invalid case number: {case_num}")
