@@ -11,7 +11,7 @@ license = "MIT"
 authors = [
   { name = "ultrasphere-dev", email = "34j.95a2p@simplelogin.com" },
 ]
-requires-python = ">=3.10"
+requires-python = ">=3.12"
 classifiers = [
   "Development Status :: 2 - Pre-Alpha",
   "Intended Audience :: Developers",
@@ -27,10 +27,12 @@ classifiers = [
 
 dependencies = [
     "array-api-compat>=1.12.0",
+    "array-api-extra>=0.9.0",
     "cyclopts>=3.24.0",
     "matplotlib>=3.10.7",
     "numpy>=2.2.6",
     "types-array-api>=1.1.4",
+    "ultrasphere>=2.0.4",
 ]
 urls."Bug Tracker" = "https://github.com/ultrasphere-dev/montecarlo-nystrom/issues"
 urls.Changelog = "https://github.com/ultrasphere-dev/montecarlo-nystrom/blob/main/CHANGELOG.md"
@@ -43,12 +45,14 @@ dev = [
   "coverage",
   "pytest>=9,<10",
   "pytest-cov>=7,<8",
+  "sybil>=9.3.0",
 ]
 docs = [
   "furo>=2023.5.20; python_version>='3.11'",
   "myst-parser>=0.16; python_version>='3.11'",
   "sphinx>=4; python_version>='3.11'",
   "sphinx-autobuild>=2025,<2026; python_version>='3.11'",
+  "sphinx-math-dollar>=1.2.1",
 ]
 
 [tool.ruff]
