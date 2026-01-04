@@ -52,12 +52,12 @@ pip install montecarlo-nystrom
 
 Solve integral equations of the second kind of the following form.
 
-$\forall d \in \mathbb{N}.
-    \forall \Omega \in \mathbb{R}^d [\Omega \text{ is bounded Lipschitz}].
-    \forall p \in L^\infty(\Omega, \mathbb{R}_{\geq 0}) [\int_\Omega p(y) dy = 1].
-    \forall f, z \in L^2(\Omega,\mathbb{C}).
-    \forall k \in L^2(\Omega,L^2(\Omega,\mathbb{C}))
-    [z(y) + \int_\Omega k(y, y') z(y') p(y') dy' = f(y)].$
+$\forall d \in \mathbb{N}.$
+$\forall \Omega \in \mathbb{R}^d [\Omega \text{ is bounded Lipschitz}].$
+$\forall p \in L^\infty(\Omega, \mathbb{R}_{\geq 0}) [\int_\Omega p(y) dy = 1].$
+$\forall f, z \in L^2(\Omega,\mathbb{C}).$
+$\forall k \in L^2(\Omega,L^2(\Omega,\mathbb{C}))$
+$[z(y) + \int_\Omega k(y, y') z(y') p(y') dy' = f(y)].$
 
 Let $N \in \mathbb{N}$, $(y_i)_{i=1}^N$ be i.i.d. samples drawn from $p$.
 
