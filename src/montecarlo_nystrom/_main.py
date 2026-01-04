@@ -17,7 +17,7 @@ def montecarlo_nystrom(
     Solve integral equations of the second kind of the following form.
 
     $\forall d \in \mathbb{N}.
-    \forall \Omega \in \mathbb{R}^d [\Omega \text{is Lipschitz}].
+    \forall \Omega \in \mathbb{R}^d [\Omega \text{is bounded Lipschitz}].
     \forall p \in L^\infty(\Omega, \mathbb{R}_{\geq 0}) [\int_\Omega p(y) dy = 1].
     \forall f, z \in L^2(\Omega,\mathbb{C}).
     \forall k \in L^2(\Omega,L^2(\Omega,\mathbb{C})
@@ -69,6 +69,28 @@ def montecarlo_nystrom(
     Callable[[Array], Array]
         Approximate solution function z_N that takes an array of shape (...(x), ..., d)
         and returns an array of shape (...(x), ...).
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from montecarlo_nystrom import montecarlo_nystrom
+    >>> rng = np.random.default_rng(0)
+    >>> def random_samples(n):
+    ...     return rng.uniform(0, 1, size=(n, 1))
+    >>> def kernel(x, y):
+    ...     return np.linalg.vector_norm(x - y, axis=-1) ** -0.4
+    >>> def rhs(x):
+    ...     x0 = x[..., 0]
+    ...     return np.ones_like(x0)
+    >>> z_N = montecarlo_nystrom(
+    ...     random_samples=random_samples,
+    ...     kernel=kernel,
+    ...     rhs=rhs,
+    ...     n=100,
+    ...     n_mean=10,
+    ... )
+    >>> np.round(z_N(np.asarray((0.5,))), 6)  # Evaluate at x=0.5
+    np.float64(0.272957)
 
     """
     y = random_samples(n * n_mean)

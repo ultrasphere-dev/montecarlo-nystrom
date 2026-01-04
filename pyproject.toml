@@ -29,7 +29,6 @@ dependencies = [
     "array-api-compat>=1.12.0",
     "array-api-extra>=0.9.0",
     "cyclopts>=3.24.0",
-    "jax[cuda12]>=0.7.2",
     "matplotlib>=3.10.7",
     "numpy>=2.2.6",
     "types-array-api>=1.1.4",
@@ -41,14 +40,12 @@ urls.documentation = "https://montecarlo-nystrom.readthedocs.io"
 urls.repository = "https://github.com/ultrasphere-dev/montecarlo-nystrom"
 scripts.montecarlo-nystrom = "montecarlo_nystrom.cli:app"
 
-[project.optional-dependencies]
-cli = []
-
 [dependency-groups]
 dev = [
   "coverage",
   "pytest>=8,<9",
   "pytest-cov>=7,<8",
+  "sybil>=9.3.0",
 ]
 docs = [
   "furo>=2023.5.20; python_version>='3.11'",
