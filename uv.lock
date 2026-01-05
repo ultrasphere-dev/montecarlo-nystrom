@@ -340,7 +340,7 @@ wheels = [
 
 [[package]]
 name = "cyclopts"
-version = "4.4.3"
+version = "4.4.4"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "attrs" },
@@ -348,9 +348,9 @@ dependencies = [
     { name = "rich" },
     { name = "rich-rst" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/8f/21/732453ae69d65d72fe37a34f8b1a455c72313b8b0a905b876da20ff7e81a/cyclopts-4.4.3.tar.gz", hash = "sha256:03797c71b49a39dcad8324d6655363056fb998e2ba0240940050331a7f63fe65", size = 159360, upload-time = "2025-12-28T18:57:03.831Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/43/c4/60b6068e703c78656d07b249919754f8f60e9e7da3325560574ee27b4e39/cyclopts-4.4.4.tar.gz", hash = "sha256:f30c591c971d974ab4f223e099f881668daed72de713713c984ca41479d393dd", size = 160046, upload-time = "2026-01-05T03:40:18.438Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/8b/28/03f9b8fbf396b3f2eaf65a7ff441ba2fb7dd397109d563a4e556dc5b3efb/cyclopts-4.4.3-py3-none-any.whl", hash = "sha256:951611a9d4d88d9916716ae281faca9af1cb79b88bb4f22bd0192cff54e7dec6", size = 196707, upload-time = "2025-12-28T18:57:04.884Z" },
+    { url = "https://files.pythonhosted.org/packages/20/5b/0eceb9a5990de9025733a0d212ca43649ba9facd58b8552b6bf93c11439d/cyclopts-4.4.4-py3-none-any.whl", hash = "sha256:316f798fe2f2a30cb70e7140cfde2a46617bfbb575d31bbfdc0b2410a447bd83", size = 197398, upload-time = "2026-01-05T03:40:17.141Z" },
 ]
 
 [[package]]
@@ -1068,7 +1068,7 @@ wheels = [
 
 [[package]]
 name = "pytest"
-version = "9.0.0"
+version = "9.0.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "colorama", marker = "sys_platform == 'win32'" },
@@ -1077,9 +1077,9 @@ dependencies = [
     { name = "pluggy" },
     { name = "pygments" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/da/1d/eb34f286b164c5e431a810a38697409cca1112cee04b287bb56ac486730b/pytest-9.0.0.tar.gz", hash = "sha256:8f44522eafe4137b0f35c9ce3072931a788a21ee40a2ed279e817d3cc16ed21e", size = 1562764, upload-time = "2025-11-08T17:25:33.34Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/d1/db/7ef3487e0fb0049ddb5ce41d3a49c235bf9ad299b6a25d5780a89f19230f/pytest-9.0.2.tar.gz", hash = "sha256:75186651a92bd89611d1d9fc20f0b4345fd827c41ccd5c299a868a05d70edf11", size = 1568901, upload-time = "2025-12-06T21:30:51.014Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/72/99/cafef234114a3b6d9f3aaed0723b437c40c57bdb7b3e4c3a575bc4890052/pytest-9.0.0-py3-none-any.whl", hash = "sha256:e5ccdf10b0bac554970ee88fc1a4ad0ee5d221f8ef22321f9b7e4584e19d7f96", size = 373364, upload-time = "2025-11-08T17:25:31.811Z" },
+    { url = "https://files.pythonhosted.org/packages/3b/ab/b3226f0bd7cdcf710fbede2b3548584366da3b19b5021e74f5bde2a8fa3f/pytest-9.0.2-py3-none-any.whl", hash = "sha256:711ffd45bf766d5264d487b917733b453d917afd2b0ad65223959f59089f875b", size = 374801, upload-time = "2025-12-06T21:30:49.154Z" },
 ]
 
 [[package]]
