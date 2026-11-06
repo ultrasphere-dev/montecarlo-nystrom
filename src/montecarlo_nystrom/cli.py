@@ -115,9 +115,9 @@ def case(
                 jax.numpy.asarray(A, device=jax_device),
                 jax.numpy.asarray(b, device=jax_device),
             )
-            x = jax.numpy.stack(
-                [jax.scipy.sparse.linalg.cg(A[i], b[i])[0] for i in range(A.shape[0])]
-            )
+            x = jax.numpy.stack([
+                jax.scipy.sparse.linalg.cg(A[i], b[i])[0] for i in range(A.shape[0])
+            ])
             return xp.from_dlpack(x)
 
         x = xp.moveaxis(us.random_ball(c, shape=(n_plot,), xp=xp, device=device), 0, -1)
@@ -180,9 +180,7 @@ def case(
             0,
             -1,
         )
-        x = xp.concat(
-            [x, xp.zeros((*x.shape[:-1], 1), device=x.device, dtype=x.dtype)], axis=-1
-        )
+        x = xp.concat([x, xp.zeros((*x.shape[:-1], 1), device=x.device, dtype=x.dtype)], axis=-1)
         z = zf(x)
         x, z = to_device(x, "cpu"), to_device(z, "cpu")
         fig, ax = plt.subplots()

@@ -95,8 +95,7 @@ def montecarlo_nystrom(
     y = random_samples(n * n_mean)
     if y.shape[-2] != n * n_mean:
         raise ValueError(
-            f"random_samples returned array of shape {y.shape}, "
-            f"expected (..., {n * n_mean}, d)"
+            f"random_samples returned array of shape {y.shape}, expected (..., {n * n_mean}, d)"
         )
     xp = array_namespace(y)
     y = xp.reshape(y, (*y.shape[:-2], n_mean, n, y.shape[-1]))  # (..., n_mean, n, d)
@@ -104,31 +103,23 @@ def montecarlo_nystrom(
     b = rhs(y)  # (..., n_mean, n)
     if K.shape[-3:] != (n_mean, n, n):
         raise ValueError(
-            f"kernel returned array of shape {K.shape}, "
-            f"expected (..., {n_mean}, {n}, {n})"
+            f"kernel returned array of shape {K.shape}, expected (..., {n_mean}, {n}, {n})"
         )
     if b.shape[-2:] != (n_mean, n):
-        raise ValueError(
-            f"rhs returned array of shape {b.shape}, expected (..., {n_mean}, {n})"
-        )
+        raise ValueError(f"rhs returned array of shape {b.shape}, expected (..., {n_mean}, {n})")
     K[..., :, xp.arange(n), xp.arange(n)] = 0  # drop diagonal
     A = xp.eye(n, dtype=K.dtype, device=K.device) + K / n
     z_N_samples = (solve or xp.linalg.solve)(A, b[..., None])
     if z_N_samples.shape[-3:] != (n_mean, n, 1):
         raise ValueError(
-            f"solve returned array of shape {z_N_samples.shape}, "
-            f"expected (..., {n_mean}, {n}, 1)"
+            f"solve returned array of shape {z_N_samples.shape}, expected (..., {n_mean}, {n}, 1)"
         )
     z_N_samples = z_N_samples[..., 0]  # (..., n_mean, n)
 
     def z_N(x: Array) -> Array:
         if x.shape[-1] != y.shape[-1]:
-            raise ValueError(
-                f"x has shape {x.shape}, expected (...(x), ..., {y.shape[-1]})"
-            )
+            raise ValueError(f"x has shape {x.shape}, expected (...(x), ..., {y.shape[-1]})")
         K_x = kernel(x[..., None, None, :], y)  # (...(x), ..., n_mean, n)
-        return (
-            rhs(x) - xp.mean(xp.vecdot(xp.conj(K_x), z_N_samples, axis=-1), axis=-1) / n
-        )
+        return rhs(x) - xp.mean(xp.vecdot(xp.conj(K_x), z_N_samples, axis=-1), axis=-1) / n
 
     return z_N
