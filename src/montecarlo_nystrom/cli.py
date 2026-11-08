@@ -4,7 +4,7 @@ from array_api._2024_12 import Array
 from array_api_compat import array_namespace, to_device
 from cyclopts import App
 from matplotlib import pyplot as plt
-from rich import print
+from rich import print as rich_print
 from scipy.special import hankel1
 
 from ._main import montecarlo_nystrom
@@ -21,7 +21,14 @@ def case(
     backend: str = "torch",
     device: str | None = None,
 ) -> None:
-    """Compute examples in the paper."""
+    """Compute examples in the paper.
+
+    Raises
+    ------
+    ValueError
+        If ``case_num`` is not one of the available examples.
+
+    """
     if backend == "numpy":
         from array_api_compat import numpy as xp
     elif backend == "torch":
@@ -30,10 +37,7 @@ def case(
         if backend == "torch":
             import torch
 
-            if torch.cuda.is_available():
-                device = "cuda"
-            else:
-                device = "cpu"
+            device = "cuda" if torch.cuda.is_available() else "cpu"
         else:
             device = "cpu"
 
@@ -49,11 +53,11 @@ def case(
             x = x[..., 0]
             if case_num == 1:
                 return xp.ones_like(x)
-            elif case_num == 2:
+            if case_num == 2:
                 return (1 - x) * x
-            elif case_num == 3:
+            if case_num == 3:
                 return xp.sin(6 * xp.pi * x)
-            raise NotImplementedError()
+            raise NotImplementedError
 
         def p(i: int, /) -> Array:
             rng = np.random.default_rng(0)
@@ -109,7 +113,7 @@ def case(
             )
 
         def solve(A: Array, b: Array, /) -> Array:
-            print("Using JAX CG solver")
+            rich_print("Using JAX CG solver")
             jax_device = jax.devices(device)[0]
             A, b = (
                 jax.numpy.asarray(A, device=jax_device),
@@ -141,13 +145,13 @@ def case(
     elif case_num == 5:
         import ultrasphere as us
 
-        def harmonic_capacity_sphere(k: int, rho: int = 1) -> complex:
+        def harmonic_capacity_sphere(rho: int = 1) -> complex:
             return -4 * np.pi * rho
 
         k = 1
         sN = 1
-        cap = harmonic_capacity_sphere(k)
-        print("Harmonic capacity of unit sphere:", cap)
+        cap = harmonic_capacity_sphere()
+        rich_print("Harmonic capacity of unit sphere:", cap)
 
         def fundamental_solution_3d(x: Array, y: Array, k: int, /) -> Array:
             xp = array_namespace(x, y)

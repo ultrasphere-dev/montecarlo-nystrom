@@ -69,6 +69,12 @@ def montecarlo_nystrom(
         Approximate solution function z_N that takes an array of shape (...(x), ..., d)
         and returns an array of shape (...(x), ...).
 
+    Raises
+    ------
+    ValueError
+        If the samples, kernel, right-hand side, or solver returns an array with
+        an unexpected shape, or if the evaluation points have the wrong dimension.
+
     Examples
     --------
     >>> import numpy as np

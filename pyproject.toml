@@ -44,7 +44,7 @@ scripts.montecarlo-nystrom = "montecarlo_nystrom.cli:app"
 [dependency-groups]
 dev = [
   "coverage",
-  "packaging-34j[test]",
+  "packaging-34j[test]>=1.1.6",
   "pytest",
   "pytest-cov",
   "ty",
@@ -55,29 +55,6 @@ docs = [
 
 [tool.ruff]
 extend = ".venv/ruff.toml"
-lint.select = [
-  "B",
-  "C4",
-  "D",
-  "E",
-  "F",
-  "I",
-  "RUF",
-  "S",
-  "UP",
-  "W",
-]
-lint.ignore = [
-  "D100",
-  "D104",
-  "D107",
-  "D203",
-  "D212",
-  "D401",
-  "DOC501",
-]
-lint.per-file-ignores."docs/conf.py" = [ "D100" ]
-lint.per-file-ignores."tests/**/*" = [ "D100", "D101", "D102", "D103", "D104", "S101" ]
 
 [tool.pyproject-fmt]
 max_supported_python = "3.14"

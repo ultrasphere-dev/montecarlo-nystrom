@@ -44,6 +44,7 @@ repos:
     rev: v2.4.2
     hooks:
       - id: codespell
+        args: [-L Numer]
   - repo: local
     hooks:
       - id: local-ty
