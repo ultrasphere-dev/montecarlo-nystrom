@@ -33,7 +33,7 @@ dependencies = [
   "rich",
   "scipy",
   "types-array-api>=1.1.4",
-  "ultrasphere>=2.0.4",
+  "ultrasphere>=2.1.0",
 ]
 urls."Bug Tracker" = "https://github.com/ultrasphere-dev/montecarlo-nystrom/issues"
 urls.Changelog = "https://github.com/ultrasphere-dev/montecarlo-nystrom/blob/main/CHANGELOG.md"
