@@ -28,7 +28,7 @@ dependencies = [
   "array-api-extra>=0.9",
   "cyclopts>=3.24",
   "jax",
-  "matplotlib>=3.10.7",
+  "matplotlib>=3.11.2",
   "numpy>=2.2.6",
   "rich",
   "scipy",
